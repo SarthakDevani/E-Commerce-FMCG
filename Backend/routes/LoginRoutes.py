@@ -38,7 +38,7 @@ async def update_user(user: User):
 async def sign_up(login_data: LoginData):
     return await activate(login_data.email, login_data.password)
 
-@router.get("/get-user/{email") 
+@router.get("/get-user/{email}") 
 async def get_user(email: str):
     return await getuser(email)
   

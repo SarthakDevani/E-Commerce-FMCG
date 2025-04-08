@@ -2,6 +2,12 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
 
+class OrderData(BaseModel):
+    productId: str
+    quantity: int
+    price: int
+    totalAmount: int
+    
 class orders(BaseModel):
     orderId: Optional[str] = None
     userId: str
