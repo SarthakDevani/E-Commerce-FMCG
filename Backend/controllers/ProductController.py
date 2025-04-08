@@ -18,3 +18,38 @@ async def getproducts():
         return {"products": product}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+async def getoneproducts(productId: str):
+    try:
+        product = await product_collection.find_one({"_id": ObjectId(productId)})
+        if product:
+            product["_id"] = str(product["_id"])
+            return {"product":product}
+        else:
+            raise HTTPException(status_code=404, detail="Product not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+async def addproduct(product: BaseModel):
+    try:
+        new_product = {
+            "productId": "",
+            "productName": product.productName,
+            "categoryId": product.categoryId,
+            "subcategoryId": product.subcategoryId,
+            "basePrice": product.basePrice,
+            "offerPrice": product.offerPrice,
+            "offerPercentage": product.offerPercentage,
+            "productDetail": product.productDetail,
+            "productImageURL1": product.productImageURL1,
+            "productImageURL2": product.productImageURL2,
+            "productImageURL3": product.productImageURL3,
+            "soldQuantity": 0,
+            "quantity": product.quantity,
+            "createdAt": datetime.now(timezone.utc)
+        }
+        productId = await product_collection.insert_one(new_product)
+        await product_collection.update_one({"_id": productId.inserted_id}, {"$set": {"productId": str(productId.inserted_id)}})
+        return {"status": "success", "message": "Product added successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

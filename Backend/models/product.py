@@ -16,12 +16,13 @@ class product(BaseModel):
     productId: Optional[str] = None
     productName: str
     categoryId: str
-    sbucategoryId: str
-    password: str
-    basePrice: str
+    subcategoryId: str
+    basePrice: Optional[int] = None
     offerPrice: Optional[int] = None
+    offerPercentage: Optional[int] = None
     productDetail:str
-    productImageURL1: Optional[int] = None
-    productImageURL2: Optional[int] = None
-    quantity: bool
+    productImageURL1: Optional[str] = None
+    productImageURL2: Optional[str] = None
+    productImageURL3: Optional[str] = None
+    quantity: Optional[int] = None
     createdAt:Optional[int] = None
