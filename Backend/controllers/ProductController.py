@@ -15,7 +15,7 @@ async def getproducts():
         for product in products:
             product["_id"] = str(product["_id"])
             
-        return {"products": product}
+        return {"products": products}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     

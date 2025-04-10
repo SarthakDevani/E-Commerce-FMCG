@@ -1,4 +1,6 @@
 import { Routes, Route } from "react-router-dom";
+import axios from "axios";
+import { useEffect } from "react";
 
 import "./App.css";
 
@@ -12,8 +14,24 @@ import EvevtsPage from "./pages/EventsPage.jsx";
 import FAQPage from "./pages/FAQPage.jsx";
 import ProductsDetailsPage from "./pages/ProductsDetailsPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
+import { storeProduct } from "./features/Home/productSlice.js";
+
+import { useDispatch } from "react-redux";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await axios.get("http://localhost:8000/products");
+
+      if (response.data) {
+        dispatch(storeProduct(response.data));
+      }
+    };
+    fetchProducts();
+  }, [dispatch]);
+
   return (
     <div>
       <Routes>
