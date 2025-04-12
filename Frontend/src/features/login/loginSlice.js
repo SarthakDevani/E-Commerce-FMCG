@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   value: 0,
   user: null,
+  orders: null,
 };
 
 export const loginSlice = createSlice({
@@ -23,8 +24,12 @@ export const loginSlice = createSlice({
       state.value = 0;
       state.user = null;
     },
+    setOrder: (state, action) => {
+      // Just modify state, don't return
+      state.orders = action.payload;
+    },
   },
 });
 
-export const { islogin, checkLogin, logout } = loginSlice.actions;
+export const { islogin, checkLogin, logout, setOrder } = loginSlice.actions;
 export default loginSlice.reducer;

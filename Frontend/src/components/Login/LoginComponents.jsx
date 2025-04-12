@@ -9,21 +9,36 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { islogin, checkLogin } from "../../features/login/loginSlice.js";
+import { setOrder } from "../../features/login/loginSlice.js"; // Rename to setOrder
 
 const LoginComponents = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
   const login = useSelector((state) => state.login.value);
+  const user = useSelector((state) => state.login.user);
 
-  const dispach = useDispatch();
+  const dispatch = useDispatch(); // Fix typo in dispatch
 
   const navigate = useNavigate();
   useEffect(() => {
-    if (login === 1) {
-      navigate("/");
-    }
-  }, [navigate, login]);
+    const fetchOrders = async () => {
+      if (login === 1 && user?.userId) {
+        try {
+          navigate("/");
+          const response = await axios.get(
+            `http://localhost:8000/orders/${user.userId}`
+          );
+          if (response.data) {
+            dispatch(setOrder(response.data)); // Use renamed action
+          }
+        } catch (error) {
+          console.error("Error fetching orders:", error);
+        }
+      }
+    };
+    fetchOrders();
+  }, [navigate, login, user, dispatch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,8 +54,8 @@ const LoginComponents = () => {
       );
 
       if (response.data) {
-        dispach(checkLogin(response.data));
-        dispach(islogin());
+        dispatch(checkLogin(response.data));
+        dispatch(islogin());
         window.alert("Login Successful");
         console.log(response.data);
       }
