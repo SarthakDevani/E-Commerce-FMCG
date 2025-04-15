@@ -15,9 +15,9 @@ async def orderComlete(userId: str,OrderData: OrderData):
             "totalAmount": OrderData.totalAmount,
             "orderStatus": "Pending",
             "createdAt": current_time}
-
+        
         orderId =  await orders_collection.insert_one(new_order)
-        await orders_collection.update_one({"userId": userId}, {"$set": {"orderId": str(orderId.inserted_id)}})
+        await orders_collection.update_one({"_id": orderId.inserted_id}, {"$set": {"orderId": str(orderId.inserted_id)}})
         new_order_detail = {
             "orderDetailId": "",
             "orderId": str(orderId.inserted_id),
@@ -26,7 +26,7 @@ async def orderComlete(userId: str,OrderData: OrderData):
             "price": OrderData.price,
             "status": "Pending",
             "paymentId": None
-        }
+        }       
         orderDetailId = await orderDetail_collection.insert_one(new_order_detail)
         await orderDetail_collection.update_one({"orderId": str(orderId.inserted_id)}, {"$set": {"orderDetailId": str(orderDetailId.inserted_id)}})
         return {"status": "success", "message": "Order placed successfully"}
