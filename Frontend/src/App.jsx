@@ -14,7 +14,9 @@ import EvevtsPage from "./pages/EventsPage.jsx";
 import FAQPage from "./pages/FAQPage.jsx";
 import ProductsDetailsPage from "./pages/ProductsDetailsPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
+import SellerPage from "./pages/SellerPage.jsx";
 import { storeProduct } from "./features/Home/productSlice.js";
+import { storecityState } from "./features/cityState/cityStateSlice.js";
 
 import { useDispatch } from "react-redux";
 
@@ -24,14 +26,17 @@ function App() {
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await axios.get("http://localhost:8000/products");
+      const cityState = await axios.get("http://localhost:8000/cityState");
 
       if (response.data) {
         dispatch(storeProduct(response.data));
       }
+      if (cityState.data) {
+        dispatch(storecityState(cityState.data));
+      }
     };
     fetchProducts();
   }, [dispatch]);
-
   return (
     <div>
       <Routes>
@@ -45,6 +50,7 @@ function App() {
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/product/:name" element={<ProductsDetailsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/seller" element={<SellerPage />} />
       </Routes>
     </div>
   );
